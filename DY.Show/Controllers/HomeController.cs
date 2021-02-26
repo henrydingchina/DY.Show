@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace DY.Show.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -19,7 +20,7 @@ namespace DY.Show.Controllers
             _logger = logger;
         }
 
-        [Authorize]
+       
         public IActionResult Index()
         {
             return View();
@@ -32,8 +33,9 @@ namespace DY.Show.Controllers
 
         public IActionResult Logout() 
         {
-            return SignOut("Cookies","oidc" );
+            return SignOut("Coookies", "oidc");
         }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

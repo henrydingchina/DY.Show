@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -38,6 +40,19 @@ namespace DY.Show
                  o.ClientSecret = "sss";
                  o.ResponseType = "code";
                  o.SaveTokens = true;
+                 o.GetClaimsFromUserInfoEndpoint = true;
+                 o.Scope.Add("userprofile");
+                 o.Events = new OpenIdConnectEvents()
+                 {
+                     OnRemoteFailure = context =>
+                     {
+                         context.HttpContext.SignOutAsync("Coookies");
+                         context.HttpContext.SignOutAsync("oidc");
+                         context.Response.Redirect("/");
+                         context.HandleResponse();
+                         return Task.FromResult(0);
+                     }
+                 };
              });
             
         }
